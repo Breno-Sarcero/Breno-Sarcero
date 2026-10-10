@@ -1,0 +1,54 @@
+<p align="center">
+  <img src="assets/header.svg" alt="Terminal: whoami → Breno Sarcero, Auxiliar de TI na CLM Controller" width="820">
+</p>
+
+## Sobre mim
+
+Auxiliar de TI na **CLM Controller**, escritório de contabilidade e assessoria em São Paulo. No dia a dia construo sistemas internos em Django, integro APIs com o ERP Questor e trabalho com SQL Server.
+
+Entusiasta de IA: uso o Claude Code como parte do fluxo de desenvolvimento e crio plugins para deixá-lo mais seguro e mais prático.
+
+## Projetos em destaque
+
+### [sql-guard](https://github.com/Breno-Sarcero/sql-guard)
+
+Plugin para o Claude Code que exige duas confirmações explícitas antes de qualquer escrita ou DDL em SQL, venha pelas ferramentas MCP do SQL Server ou por comandos de banco no terminal. Tudo fica registrado em log de auditoria.
+
+<img src="https://github.com/Breno-Sarcero/sql-guard/raw/main/docs/demo-pt.gif" alt="sql-guard bloqueando um DELETE até a dupla confirmação" width="720">
+
+### [usage-bar](https://github.com/Breno-Sarcero/usage-bar)
+
+Plugin para o Claude Code que mostra uma barra de uso acima do prompt, com janela de contexto e limites de uso (5h e semana), em português ou inglês.
+
+<img src="https://github.com/Breno-Sarcero/usage-bar/raw/main/docs/demo-pt.gif" alt="usage-bar acompanhando contexto, 5h e semana acima do prompt" width="720">
+
+### Outros
+
+- [IsyShell](https://github.com/Breno-Sarcero/isyshell): microsserviço para execução remota e segura de shell scripts via API REST. Hackathon FMU Tech 2026.
+- [UNO](https://github.com/Breno-Sarcero/UNO): assistente pessoal de voz no estilo Alexa, rodando 100% em hardware próprio (ESP32 + LLM local). Em fase de arquitetura.
+
+## Stack
+
+**Linguagens**
+
+![Python](https://img.shields.io/badge/Python-1c1917?style=for-the-badge&logo=python&logoColor=f59e0b)
+![TypeScript](https://img.shields.io/badge/TypeScript-1c1917?style=for-the-badge&logo=typescript&logoColor=f59e0b)
+![SQL](https://img.shields.io/badge/SQL-1c1917?style=for-the-badge&logo=databricks&logoColor=f59e0b)
+
+**Frameworks e banco de dados**
+
+![Django](https://img.shields.io/badge/Django-1c1917?style=for-the-badge&logo=django&logoColor=f59e0b)
+![SQL Server](https://img.shields.io/badge/SQL%20Server-1c1917?style=for-the-badge&logo=microsoftsqlserver&logoColor=f59e0b)
+![REST APIs](https://img.shields.io/badge/REST%20APIs-1c1917?style=for-the-badge&logo=swagger&logoColor=f59e0b)
+
+**Ferramentas**
+
+![Claude Code](https://img.shields.io/badge/Claude%20Code-1c1917?style=for-the-badge&logo=claude&logoColor=f59e0b)
+![Questor ERP](https://img.shields.io/badge/Questor%20ERP-1c1917?style=for-the-badge)
+![Git](https://img.shields.io/badge/Git-1c1917?style=for-the-badge&logo=git&logoColor=f59e0b)
+![GitHub](https://img.shields.io/badge/GitHub-1c1917?style=for-the-badge&logo=github&logoColor=f59e0b)
+
+## Contato
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-1c1917?style=for-the-badge&logo=linkedin&logoColor=f59e0b)](https://www.linkedin.com/in/breno-santiago-sarcero)
+[![E-mail](https://img.shields.io/badge/E--mail-1c1917?style=for-the-badge&logo=gmail&logoColor=f59e0b)](mailto:santiagobreno6@gmail.com)
