@@ -9,7 +9,7 @@ Auxiliar de TI na **CLM Controller**, escritório de contabilidade e assessoria 
 Entusiasta de IA: uso o Claude Code como parte do fluxo de desenvolvimento e crio plugins para deixá-lo mais seguro e mais prático.
 
 <p align="center">
-  <img src="assets/agent.svg?v=2" alt="Mascote que dorme, acorda com um comando, trabalha, se irrita com um erro, corrige e comemora" width="820">
+  <img src="assets/agent.svg?v=3" alt="Mascote que dorme, acorda com um comando, trabalha, se irrita com um erro, corrige e comemora" width="820">
 </p>
 
 ## Como trabalho com IA

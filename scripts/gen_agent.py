@@ -1,16 +1,24 @@
 """Gera assets/agent.svg: mascote com emoções (dorme, acorda, trabalha, raiva com bug, comemora)
-sincronizado com um terminal de automação agêntica, em loop."""
+sincronizado com um terminal de automação agêntica, em loop.
+
+O mascote é sempre o mesmo corpo, de frente; cada emoção muda só olhos, braços, cor e acessórios.
+"""
 import sys
 from html import escape
 
 OUT = sys.argv[1]
 W, H = 820, 280
 DUR = 16.0                        # duração do loop em segundos
-MX, MY, MS = 22, 34, 1.9          # posição e escala do mascote (desenhado em 120x120)
+MX, MY, MS = 30, 30, 1.9          # posição e escala do mascote (desenhado em 120x120)
 
 BG, FG, DIM, AMBER, GREEN, RED = "#1c1917", "#e7e5e4", "#a8a29e", "#f59e0b", "#86efac", "#f87171"
-C, CD, CL, EYE = "#d97757", "#a9553c", "#eba184", "#1c1917"   # laranja, sombra, brilho, olhos
+ORANGE = ("#d97757", "#a9553c", "#eba184")         # cor, sombra, brilho
+HOT = ("#dc2626", "#7f1d1d", "#f87171")
+EYE = "#1c1917"
 FONT = "'JetBrains Mono','Cascadia Code',Consolas,'DejaVu Sans Mono',monospace"
+
+# linha do tempo (s): dorme · acorda · trabalha · raiva · trabalha · comemora
+T_WAKE, T_WORK, T_RAGE, T_FIX, T_HAPPY = 3.0, 4.0, 7.8, 10.0, 12.4
 
 
 def vis(t0, t1=None):
@@ -25,102 +33,111 @@ def vis(t0, t1=None):
             f'calcMode="discrete" dur="{DUR}s" repeatCount="indefinite"/>')
 
 
-def loop(kind, values, dur, extra=""):
+def loop(kind, values, dur, begin=None):
+    b = f' begin="{begin}"' if begin else ""
     if kind == "opacity":
-        return f'<animate attributeName="opacity" values="{values}" dur="{dur}s" repeatCount="indefinite"{extra}/>'
+        return f'<animate attributeName="opacity" values="{values}" dur="{dur}s" repeatCount="indefinite"{b}/>'
     return (f'<animateTransform attributeName="transform" type="{kind}" values="{values}" '
-            f'dur="{dur}s" repeatCount="indefinite"{extra}/>')
+            f'dur="{dur}s" repeatCount="indefinite"{b}/>')
 
 
-SHADOW = '<ellipse cx="60" cy="106" rx="38" ry="5" fill="#0c0a09" opacity=".7"/>'
+# ---------- corpo único (grade de 6 unidades: corpo 12x8, braços nas linhas 4-5, 4 pernas) ----------
+def legs(c, h=12):
+    cor, sombra, _ = c
+    return (f'<rect x="30" y="76" width="6" height="{h + 2}" fill="{sombra}"/><rect x="84" y="76" width="6" height="{h + 2}" fill="{sombra}"/>'
+            f'<rect x="42" y="76" width="6" height="{h + 2}" fill="{cor}"/><rect x="72" y="76" width="6" height="{h + 2}" fill="{cor}"/>')
 
 
-def body(c=C, cd=CD, cl=CL, y=30, h=36):
-    return (f'<path d="M30 {y}H90V{y + h + 4}H30Z" fill="{cd}"/>'
-            f'<path d="M30 {y}H90V{y + h}H30Z" fill="{c}"/>'
-            f'<rect x="32" y="{y + 2}" width="56" height="4" fill="{cl}"/>')
+def torso(c):
+    cor, sombra, brilho = c
+    return (f'<rect x="24" y="30" width="72" height="48" fill="{cor}"/>'
+            f'<rect x="24" y="72" width="72" height="6" fill="{sombra}"/>'
+            f'<rect x="24" y="30" width="72" height="4" fill="{brilho}"/>')
 
 
-def legs(back=CD, front=C, y=66, h=28):
-    return (f'<g fill="{back}"><rect x="38" y="{y}" width="8" height="{h}" rx="2"/><rect x="74" y="{y}" width="8" height="{h}" rx="2"/></g>'
-            f'<g fill="{front}"><rect x="48" y="{y}" width="8" height="{h}" rx="2"/><rect x="64" y="{y}" width="8" height="{h}" rx="2"/></g>')
+def arms(c, up=False):
+    cor = c[0]
+    if up:   # braços levantados, saindo dos ombros
+        return f'<rect x="12" y="14" width="12" height="28" fill="{cor}"/><rect x="96" y="14" width="12" height="28" fill="{cor}"/>'
+    return f'<rect x="12" y="54" width="12" height="12" fill="{cor}"/><rect x="96" y="54" width="12" height="12" fill="{cor}"/>'
 
 
-ARMS = f'<rect x="18" y="42" width="12" height="20" rx="2" fill="{C}"/><rect x="90" y="42" width="12" height="20" rx="2" fill="{C}"/>'
-HAPPY_EYES = (f'<g stroke="{EYE}" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none">'
-              '<path d="M42 46L50 51L42 56"/><path d="M78 46L70 51L78 56"/></g>')
+EYES_OPEN = f'<g fill="{EYE}"><rect x="36" y="42" width="6" height="12"/><rect x="78" y="42" width="6" height="12"/></g>'
+EYES_SHUT = f'<g fill="{EYE}"><rect x="34" y="50" width="10" height="4"/><rect x="76" y="50" width="10" height="4"/></g>'
 
-# ---------- poses ----------
+
+def chevrons(color, w=4.5):
+    return (f'<g stroke="{color}" stroke-width="{w}" stroke-linecap="square" stroke-linejoin="miter" fill="none">'
+            '<path d="M35 42L43 48L35 54"/><path d="M85 42L77 48L85 54"/></g>')
+
+
+SHADOW = '<ellipse cx="60" cy="96" rx="40" ry="5" fill="#0c0a09" opacity=".7"/>'
+
+# ---------- emoções ----------
 sleep = (SHADOW
-         + f'<rect x="32" y="88" width="10" height="12" rx="3" fill="{CD}"/><rect x="46" y="88" width="10" height="12" rx="3" fill="{C}"/>'
-         f'<rect x="64" y="88" width="10" height="12" rx="3" fill="{C}"/><rect x="78" y="88" width="10" height="12" rx="3" fill="{CD}"/>'
-         f'<g>{loop("translate", "0 0;0 1.5;0 0", 2.4)}'   # respiração
-         f'<path d="M28 46H92V92H80V96H40V92H28Z" fill="{CD}"/><path d="M28 46H92V88H80V94H40V88H28Z" fill="{C}"/>'
-         f'<rect x="30" y="48" width="60" height="4" fill="{CL}"/>'
-         f'<rect x="18" y="60" width="10" height="18" rx="3" fill="{C}"/><rect x="92" y="60" width="10" height="18" rx="3" fill="{C}"/>'
-         f'<g stroke="{EYE}" stroke-width="4" stroke-linecap="round"><line x1="42" y1="66" x2="52" y2="66"/><line x1="68" y1="66" x2="78" y2="66"/></g>'
-         '<path d="M32 48C32 30 72 20 88 48Z" fill="#3b82f6"/><rect x="28" y="44" width="64" height="6" rx="3" fill="#fff"/>'
-         '<path d="M82 36Q96 38 98 56Q96 68 92 72" fill="none" stroke="#3b82f6" stroke-width="10" stroke-linecap="round"/>'
-         '<circle cx="91" cy="74" r="6" fill="#fff"/></g>'
+         + f'<g>{loop("translate", "0 0;0 1.5;0 0", 2.4)}'           # respiração
+         + legs(ORANGE, 4).replace('y="76"', 'y="84"') + '<g transform="translate(0 8)">'
+         + torso(ORANGE) + arms(ORANGE) + EYES_SHUT
+         + '<path d="M26 32C30 10 70 4 94 32Z" fill="#3b82f6"/><rect x="22" y="28" width="76" height="7" rx="3" fill="#fff"/>'
+         '<path d="M86 18Q104 20 106 40Q105 52 100 56" fill="none" stroke="#3b82f6" stroke-width="9" stroke-linecap="round"/>'
+         '<circle cx="99" cy="58" r="6" fill="#fff"/></g></g>'
          f'<g font-weight="900" fill="#60a5fa">{loop("translate", "0 0;4 -8", 2)}{loop("opacity", "0;1;1;0", 2)}'
-         '<text x="98" y="40" font-size="16">Z</text><text x="106" y="26" font-size="12" fill="#93c5fd">z</text>'
-         '<text x="110" y="14" font-size="9" fill="#bfdbfe">z</text></g>')
+         '<text x="100" y="34" font-size="16">Z</text><text x="108" y="20" font-size="12" fill="#93c5fd">z</text>'
+         '<text x="113" y="9" font-size="9" fill="#bfdbfe">z</text></g>')
 
-awake = (SHADOW + legs() + f'<g>{body()}{ARMS}'
-         f'<rect x="43" y="44" width="6" height="11" rx="2" fill="{EYE}"/><rect x="71" y="44" width="6" height="11" rx="2" fill="{EYE}"/></g>'
-         f'<text x="60" y="22" fill="{AMBER}" font-size="20" font-weight="900" text-anchor="middle">!'
+awake = (SHADOW + legs(ORANGE) + torso(ORANGE) + arms(ORANGE) + EYES_OPEN
+         + f'<text x="60" y="22" fill="{AMBER}" font-size="20" font-weight="900" text-anchor="middle">!'
          f'{loop("translate", "0 0;0 -3;0 0", 0.4)}</text>')
 
-work = (SHADOW + '<rect x="6" y="98" width="108" height="4" rx="2" fill="#44403c"/>'
-        # sentado de lado, olhando para o notebook à esquerda
-        f'<g fill="{CD}"><rect x="62" y="76" width="8" height="22" rx="2"/><rect x="88" y="76" width="8" height="22" rx="2"/></g>'
-        f'<path d="M50 36H100V80H50Z" fill="{CD}"/><path d="M50 36H100V76H50Z" fill="{C}"/>'
-        f'<rect x="52" y="38" width="46" height="4" fill="{CL}"/>'
-        f'<g fill="{C}"><rect x="72" y="76" width="8" height="22" rx="2"/><rect x="80" y="76" width="8" height="22" rx="2"/></g>'
-        f'<g fill="{EYE}">{loop("translate", "0 0;0 0;-2 0;-2 0;0 0", 3)}'
-        '<rect x="56" y="48" width="5" height="10" rx="2"/><rect x="70" y="48" width="5" height="10" rx="2"/></g>'
-        '<path d="M8 96L42 96L38 92L12 92Z" fill="#9ca3af"/><rect x="8" y="95" width="34" height="3" rx="1" fill="#6b7280"/>'
-        '<path d="M10 62L34 62L36 92L8 92Z" fill="#1f2937" stroke="#4b5563" stroke-width="2"/>'
-        '<path d="M12 64L32 64L34 90L10 90Z" fill="#064e3b"/>'
-        # linhas de código aparecendo na tela
-        + "".join(f'<line x1="14" y1="{70 + i * 5}" x2="{w}" y2="{70 + i * 5}" stroke="{col}" stroke-width="1.6" stroke-linecap="round">'
-                  f'<animate attributeName="opacity" values="0;1;1" dur="1.2s" begin="{i * 0.3:.1f}s" repeatCount="indefinite"/></line>'
-                  for i, (w, col) in enumerate([(24, "#fff"), (29, "#34d399"), (21, "#fbbf24"), (27, "#34d399")]))
-        + f'<g>{loop("translate", "0 0;-1.5 1.5;0 0", 0.25)}'
-        f'<rect x="30" y="80" width="24" height="7" rx="3" fill="{C}"/></g>'
-        f'<g>{loop("translate", "0 0;-1.5 1.5;0 0", 0.25, ' begin="0.12s"')}'
-        f'<rect x="34" y="86" width="20" height="6" rx="3" fill="{CD}"/></g>')
+# trabalhando: notebook na frente (vemos a tampa), olhos baixos piscando, braços digitando
+work = (SHADOW + legs(ORANGE) + torso(ORANGE)
+        + f'<g fill="{EYE}"><rect x="36" y="48" width="6" height="7"/><rect x="78" y="48" width="6" height="7"/>'
+        f'<animate attributeName="opacity" values="1;0;1" keyTimes="0;.92;.97" dur="2.6s" repeatCount="indefinite"/></g>'
+        + f'<rect x="12" y="58" width="12" height="12" fill="{ORANGE[0]}">{loop("translate", "0 0;3 2;0 0", 0.3)}</rect>'
+        f'<rect x="96" y="58" width="12" height="12" fill="{ORANGE[0]}">{loop("translate", "0 0;-3 2;0 0", 0.3, "0.15s")}</rect>'
+        # tampa do notebook com brilho da tela no rosto
+        '<path d="M34 64H86L90 96H30Z" fill="#57534e"/><path d="M36 66H84L87 94H33Z" fill="#78716c"/>'
+        '<rect x="22" y="94" width="76" height="4" rx="2" fill="#a8a29e"/>'
+        f'<text x="60" y="84" fill="{AMBER}" font-size="10" font-weight="700" text-anchor="middle">&lt;/&gt;</text>'
+        '<rect x="24" y="34" width="72" height="30" fill="#34d399" opacity=".08"/>'
+        # símbolos de código subindo
+        + "".join(f'<text x="{x}" y="60" fill="{col}" font-size="9" font-weight="700" opacity="0">{escape(s)}'
+                  f'{loop("translate", "0 0;0 -40", 1.8, f"{d}s")}{loop("opacity", "0;1;0", 1.8, f"{d}s")}</text>'
+                  for x, s, col, d in [(18, "{ }", "#34d399", 0), (96, "SQL", "#fbbf24", 0.6), (8, "API", "#60a5fa", 1.2)]))
 
 rage = ('<defs><linearGradient id="fire" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#dc2626"/>'
-        '<stop offset=".4" stop-color="#ea580c"/><stop offset=".7" stop-color="#f59e0b"/><stop offset="1" stop-color="#fef08a"/></linearGradient>'
-        '<linearGradient id="hot" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ef4444"/><stop offset="1" stop-color="#991b1b"/></linearGradient></defs>'
-        '<ellipse cx="60" cy="108" rx="40" ry="6" fill="#7f1d1d" opacity=".5"/>'
+        '<stop offset=".4" stop-color="#ea580c"/><stop offset=".7" stop-color="#f59e0b"/><stop offset="1" stop-color="#fef08a"/></linearGradient></defs>'
+        '<ellipse cx="60" cy="96" rx="42" ry="6" fill="#7f1d1d" opacity=".6"/>'
         f'<g>{loop("translate", "-1.5 0;1.5 0;-1.5 0", 0.12)}'
-        '<g><path d="M36 32Q32 10 44 16Q48 2 60 0Q72 2 76 16Q88 10 84 32Z" fill="url(#fire)">'
-        f'{loop("translate", "0 0;0 -2;0 0", 0.3)}</path>'
-        f'<path d="M44 32Q42 18 50 20Q54 8 60 6Q66 8 70 20Q78 18 76 32Z" fill="#fff">{loop("opacity", ".9;.4;.9", 0.25)}</path></g>'
-        + legs("#7f1d1d", "#b91c1c", 70, 26)
-        + '<path d="M30 32H90V74H30Z" fill="#7f1d1d"/><path d="M30 32H90V70H30Z" fill="url(#hot)"/><rect x="32" y="34" width="56" height="4" fill="#f87171"/>'
-        '<rect x="16" y="38" width="12" height="20" rx="3" fill="#b91c1c" transform="rotate(-30 16 38)"/>'
-        '<rect x="92" y="38" width="12" height="20" rx="3" fill="#b91c1c" transform="rotate(30 92 38)"/>'
-        '<g stroke="#fef08a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none">'
-        '<path d="M40 46L50 51L40 56"/><path d="M80 46L70 51L80 56"/></g>'
-        '<path d="M38 40L52 45M82 40L68 45" stroke="#7f1d1d" stroke-width="4" stroke-linecap="round"/>'
-        '<rect x="48" y="58" width="24" height="8" rx="2" fill="#7f1d1d"/>'
-        '<path d="M50 60H70M55 58V66M60 58V66M65 58V66" stroke="#fff" stroke-width="1.5"/></g>'
-        f'<g fill="{AMBER}" font-weight="900" font-size="15"><text x="-4" y="28">#!?</text><text x="96" y="28">ERR</text></g>')
+        f'<path d="M30 31Q26 12 38 16Q42 0 60 -4Q78 0 82 16Q94 12 90 31Z" fill="url(#fire)">{loop("translate", "0 0;0 -2;0 0", 0.3)}</path>'
+        f'<path d="M40 31Q38 18 46 20Q50 6 60 4Q70 6 74 20Q82 18 80 31Z" fill="#fff">{loop("opacity", ".9;.4;.9", 0.25)}</path>'
+        + legs(HOT) + torso(HOT) + arms(HOT, up=True) + chevrons("#fef08a", 5)
+        + '<path d="M32 36L46 42M88 36L74 42" stroke="#7f1d1d" stroke-width="4" stroke-linecap="square"/>'
+        '<rect x="46" y="58" width="28" height="9" fill="#7f1d1d"/>'
+        '<path d="M48 62.5H72M53 58V67M60 58V67M67 58V67" stroke="#fff" stroke-width="1.5"/></g>'
+        f'<g fill="{AMBER}" font-weight="900" font-size="15"><text x="-8" y="20">#!?</text><text x="98" y="20">ERR</text></g>')
 
-happy = (SHADOW + f'<g>{loop("translate", "0 0;0 -8;0 0;0 0", 0.9)}{legs()}{body()}'
-         f'<rect x="18" y="18" width="12" height="26" rx="2" fill="{C}" transform="rotate(-20 30 44)"/>'
-         f'<rect x="90" y="18" width="12" height="26" rx="2" fill="{C}" transform="rotate(20 90 44)"/>'
-         f'{HAPPY_EYES}</g>'
+happy = (SHADOW + f'<g>{loop("translate", "0 0;0 -8;0 0;0 0", 0.9)}'
+         + legs(ORANGE) + torso(ORANGE) + arms(ORANGE, up=True) + chevrons(EYE) + '</g>'
          f'<g fill="{AMBER}" font-size="14">{loop("opacity", "1;.2;1", 0.8)}'
-         '<text x="4" y="24">✦</text><text x="104" y="18">✦</text><text x="110" y="70">✦</text></g>')
+         '<text x="0" y="24">✦</text><text x="106" y="16">✦</text><text x="112" y="70">✦</text></g>')
 
-# linha do tempo (s): dorme 0-3 · acorda 3-4 · trabalha 4-7.8 · raiva 7.8-10 · trabalha 10-12.4 · comemora 12.4-16
-poses = [(sleep, 0, 3), (awake, 3, 4), (work, 4, 7.8), (rage, 7.8, 10), (work, 10, 12.4), (happy, 12.4, None)]
-mascot = "".join(f'<g opacity="{1 if t0 == 0 else 0}">{vis(t0, t1)}{g}</g>' for g, t0, t1 in poses)
-mascot = f'<g transform="translate({MX} {MY}) scale({MS})">{mascot}</g>'
+poses = [(sleep, 0, T_WAKE), (awake, T_WAKE, T_WORK), (work, T_WORK, T_RAGE),
+         (rage, T_RAGE, T_FIX), (work, T_FIX, T_HAPPY), (happy, T_HAPPY, None)]
+inner = "".join(f'<g opacity="{1 if t0 == 0 else 0}">{vis(t0, t1)}{g}</g>' for g, t0, t1 in poses)
+
+# "pop" a cada troca de emoção: achata, estica e volta (escala a partir dos pés)
+vals, keys = ["1 1"], [0.0]
+for t in (T_WAKE, T_WORK, T_RAGE, T_FIX, T_HAPPY):
+    for dt, v in ((-0.01, "1 1"), (0, "1.14 0.84"), (0.1, "0.92 1.1"), (0.2, "1.03 0.98"), (0.28, "1 1")):
+        vals.append(v)
+        keys.append((t + dt) / DUR)
+vals.append("1 1")
+keys.append(1.0)
+pop = (f'<animateTransform attributeName="transform" type="scale" values="{";".join(vals)}" '
+       f'keyTimes="{";".join(f"{k:.4f}" for k in keys)}" dur="{DUR}s" repeatCount="indefinite"/>')
+mascot = (f'<g transform="translate({MX + 60 * MS} {MY + 96 * MS}) scale({MS})"><g>{pop}'
+          f'<g transform="translate(-60 -96)">{inner}</g></g></g>')
 
 
 # ---------- terminal ----------
@@ -131,9 +148,9 @@ def text(x, y, s, color, weight="400"):
 TX, TY, LH, CHK = 300, 52, 30, 640
 term = [
     # cursor piscando enquanto o mascote dorme
-    f'<g>{vis(0, 3)}{text(TX, TY, "$", AMBER, "700")}'
+    f'<g>{vis(0, T_WAKE)}{text(TX, TY, "$", AMBER, "700")}'
     f'<rect x="{TX + 18}" y="{TY - 13}" width="9" height="17" fill="{AMBER}">{loop("opacity", "1;0;1", 1)}</rect></g>',
-    f'<g opacity="0">{vis(3)}{text(TX, TY, "$ claude", AMBER, "700")}{text(TX + 92, TY, chr(34) + "fecha o mês do cliente" + chr(34), FG, "700")}</g>',
+    f'<g opacity="0">{vis(T_WAKE)}{text(TX, TY, "$ claude", AMBER, "700")}{text(TX + 92, TY, chr(34) + "fecha o mês do cliente" + chr(34), FG, "700")}</g>',
 ]
 
 
@@ -148,11 +165,11 @@ def step(row, label, t_start, t_ok, t_fail=None):
 term += [
     step(1, "Lendo dados do ERP via API…", 4.0, 5.0),
     step(2, "Conciliando lançamentos…", 5.3, 6.3),
-    step(3, "Validando no SQL Server…", 6.6, 10.8, t_fail=7.8),
-    f'<g opacity="0">{vis(7.8, 10.8)}{text(TX + 22, TY + 4 * LH + 8, "↳ saldo divergente, corrigindo…", RED)}</g>',
+    step(3, "Validando no SQL Server…", 6.6, 10.8, t_fail=T_RAGE),
+    f'<g opacity="0">{vis(T_RAGE, 10.8)}{text(TX + 22, TY + 4 * LH + 8, "↳ saldo divergente, corrigindo…", RED)}</g>',
     f'<g opacity="0">{vis(10.8)}{text(TX + 22, TY + 4 * LH + 8, "↳ corrigido e validado de novo", DIM)}</g>',
     step(5, "Abrindo PR para revisão…", 11.2, 12.2),
-    f'<g opacity="0">{vis(12.4)}{text(TX, TY + 6 * LH + 14, "✓ pronto · automação agêntica com IA", GREEN, "700")}</g>',
+    f'<g opacity="0">{vis(T_HAPPY)}{text(TX, TY + 6 * LH + 14, "✓ pronto · automação agêntica com IA", GREEN, "700")}</g>',
 ]
 
 svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" font-family="{FONT}" role="img" aria-label="Mascote que dorme, acorda com um comando, trabalha, se irrita com um erro, corrige e comemora: automação agêntica com IA">
