@@ -1,10 +1,15 @@
 <p align="center">
-  <img src="assets/header.svg?v=2" alt="Terminal: whoami → Breno Sarcero, Auxiliar de TI na CLM Controller" width="820">
+  <img src="assets/header-v2.svg" alt="Terminal: Olá, sejam bem-vindos todos! Breno Sarcero, Dev Júnior de IA, cursando ADS na FMU" width="820">
 </p>
 
 ## Sobre mim
 
-Auxiliar de TI na **CLM Controller**, escritório de contabilidade e assessoria em São Paulo. No dia a dia construo sistemas internos em Django, integro APIs com o ERP Questor e trabalho com SQL Server.
+Estudante de Análise e Desenvolvimento de Sistemas na FMU. Hoje desenvolvo sites e soluções para a área contábil, além de dashboards em Power BI. Atuo de ponta a ponta (full stack):
+
+- **Back-end e web:** sistemas internos em Django, com integração por API ao ERP Questor.
+- **Banco de dados:** modelagem de tabelas limpas e organizadas no SQL Server.
+- **Procedures:** tratamento e transformação dos dados para que cheguem corretos às telas e aos relatórios.
+- **Power BI:** dashboards construídos sobre esses dados já tratados.
 
 Entusiasta de IA: uso o Claude Code como parte do fluxo de desenvolvimento e crio plugins para deixá-lo mais seguro e mais prático.
 
@@ -69,6 +74,7 @@ Plugin para o Claude Code que mostra uma barra de uso acima do prompt, com janel
 
 **Ferramentas**
 
+![Power BI](https://img.shields.io/badge/Power%20BI-1c1917?style=for-the-badge)
 ![Questor ERP](https://img.shields.io/badge/Questor%20ERP-1c1917?style=for-the-badge)
 ![Git](https://img.shields.io/badge/Git-1c1917?style=for-the-badge&logo=git&logoColor=f59e0b)
 ![GitHub](https://img.shields.io/badge/GitHub-1c1917?style=for-the-badge&logo=github&logoColor=f59e0b)

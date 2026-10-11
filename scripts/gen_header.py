@@ -2,7 +2,7 @@ import sys
 from html import escape
 
 OUT = sys.argv[1]
-W, H = 820, 300
+W, H = 820, 322
 FS, CW, LH = 16, 9.6, 26          # fonte, largura do caractere, altura da linha
 X0, Y0 = 28, 84                   # início do texto
 TYPE = 0.07                       # segundos por caractere digitado
@@ -10,11 +10,13 @@ TYPE = 0.07                       # segundos por caractere digitado
 BG, BAR, FG, DIM, AMBER, GREEN = "#1c1917", "#292524", "#e7e5e4", "#a8a29e", "#f59e0b", "#86efac"
 PROMPT = "breno@sarcero:~$"
 
-# (comando, [linhas de saída])
+# (comando, [(linha de saída, cor, segundos até o ✓ ou None)])
 SCRIPT = [
-    ("whoami", ["Breno Sarcero · Auxiliar de TI na CLM Controller"]),
-    ("cat stack.txt", ["Django · APIs · Questor ERP · SQL Server · Claude Code"]),
-    ("echo $INTERESSES", ["agentes de IA, automações agênticas e integrações"]),
+    ('claude "Olá, sejam bem-vindos todos!"', [
+        ("● Lendo apresentacao.md…", DIM, 1.2),
+        ("Breno Sarcero · Dev Júnior de IA · cursando ADS na FMU", GREEN, None)]),
+    ("cat stack.txt", [("Django · APIs · Questor ERP · SQL Server · Claude Code", DIM, None)]),
+    ("echo $INTERESSES", [("automações com agentes de IA · análise de dados", DIM, None)]),
 ]
 
 parts, t, y = [], 0.6, Y0
@@ -41,9 +43,14 @@ for i, (cmd, outs) in enumerate(SCRIPT):
         + text(cx, y, cmd, FG, f' clip-path="url(#c{i})"'))
     t += 0.3 + dur + 0.35
     y += LH
-    for o in outs:
+    for o, color, wait in outs:
         parts.append(f'<g opacity="0"><set attributeName="opacity" to="1" begin="{t:.2f}s" fill="freeze"/>'
-                     + text(X0, y, o, GREEN if i == 0 else DIM) + '</g>')
+                     + text(X0, y, o, color) + '</g>')
+        if wait:   # linha "lendo…" ganha ✓ quando termina
+            t += wait
+            parts.append(f'<g opacity="0"><set attributeName="opacity" to="1" begin="{t:.2f}s" fill="freeze"/>'
+                         + text(X0 + (len(o) + 1) * CW, y, "✓", GREEN) + '</g>')
+            t += 0.3
         y += LH
     t += 0.5
     y += 8
@@ -57,7 +64,7 @@ parts.append(f'<g opacity="0"><set attributeName="opacity" to="1" begin="{t:.2f}
 dots = "".join(f'<circle cx="{24 + k * 20}" cy="20" r="6" fill="{c}"/>'
                for k, c in enumerate(["#ff5f57", "#febc2e", "#28c840"]))
 
-svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" aria-label="Terminal: whoami, Breno Sarcero, Auxiliar de TI na CLM Controller">
+svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" role="img" aria-label="Terminal: Olá, sejam bem-vindos todos! Breno Sarcero, Dev Júnior de IA, cursando ADS na FMU">
 <defs><pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1" fill="#44403c"/></pattern></defs>
 <rect width="{W}" height="{H}" rx="12" fill="{BG}"/>
 <rect width="{W}" height="{H}" rx="12" fill="url(#dots)" opacity=".55"/>
