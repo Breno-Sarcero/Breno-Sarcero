@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/header.svg" alt="Terminal: whoami → Breno Sarcero, Auxiliar de TI na CLM Controller" width="820">
+  <img src="assets/header.svg?v=2" alt="Terminal: whoami → Breno Sarcero, Auxiliar de TI na CLM Controller" width="820">
 </p>
 
 ## Sobre mim
@@ -9,7 +9,7 @@ Auxiliar de TI na **CLM Controller**, escritório de contabilidade e assessoria 
 Entusiasta de IA: uso o Claude Code como parte do fluxo de desenvolvimento e crio plugins para deixá-lo mais seguro e mais prático.
 
 <p align="center">
-  <img src="assets/agent.svg" alt="Mascote que dorme, acorda com um comando, trabalha, se irrita com um erro, corrige e comemora" width="820">
+  <img src="assets/agent.svg?v=2" alt="Mascote que dorme, acorda com um comando, trabalha, se irrita com um erro, corrige e comemora" width="820">
 </p>
 
 ## Como trabalho com IA
@@ -22,7 +22,7 @@ Não uso IA só para conversar: monto agentes que fazem o trabalho de ponta a po
 - **Plugins e hooks para o Claude Code:** ajustam o comportamento do agente ao meu fluxo.
 
 <p align="center">
-  <img src="assets/flow.svg" alt="Fluxo agêntico: você, orquestrador, subagentes, ferramentas MCP e PR revisado" width="820">
+  <img src="assets/flow.svg?v=2" alt="Fluxo agêntico: você, orquestrador, subagentes, ferramentas MCP e PR revisado" width="820">
 </p>
 
 ## Projetos em destaque
