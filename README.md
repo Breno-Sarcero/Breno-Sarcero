@@ -1,6 +1,10 @@
 <p align="center">
   <img src="assets/header-v3.svg" alt="Terminal: Olá, sejam bem-vindos todos! Breno Sarcero, Dev Júnior de IA, cursando ADS na FMU" width="820">
 </p>
+<p align="center">
+  <a href="https://www.linkedin.com/in/breno-santiago-sarcero"><img src="https://skillicons.dev/icons?i=linkedin" alt="LinkedIn" height="40"></a>
+  <a href="mailto:santiagobreno6@gmail.com"><img src="https://skillicons.dev/icons?i=gmail" alt="E-mail" height="40"></a>
+</p>
 
 ## Sobre mim
 
@@ -72,8 +76,3 @@ Plugin para o Claude Code que mostra uma barra de uso acima do prompt, com janel
     <td><img src="https://skillicons.dev/icons?theme=dark&i=git,github,powershell" alt="Git, GitHub, PowerShell" height="48"></td>
   </tr>
 </table>
-
-## Contato
-
-<a href="https://www.linkedin.com/in/breno-santiago-sarcero"><img src="https://skillicons.dev/icons?i=linkedin" alt="LinkedIn" height="40"></a>
-<a href="mailto:santiagobreno6@gmail.com"><img src="https://skillicons.dev/icons?i=gmail" alt="E-mail" height="40"></a>
