@@ -8,6 +8,10 @@ Auxiliar de TI na **CLM Controller**, escritório de contabilidade e assessoria 
 
 Entusiasta de IA: uso o Claude Code como parte do fluxo de desenvolvimento e crio plugins para deixá-lo mais seguro e mais prático.
 
+<p align="center">
+  <img src="assets/agent.svg" alt="Mascote pixel art executando uma automação agêntica: lê o ERP, concilia, valida no SQL Server e abre PR" width="820">
+</p>
+
 ## Projetos em destaque
 
 ### [sql-guard](https://github.com/Breno-Sarcero/sql-guard)
