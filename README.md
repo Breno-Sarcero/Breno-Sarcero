@@ -9,7 +9,20 @@ Auxiliar de TI na **CLM Controller**, escritório de contabilidade e assessoria 
 Entusiasta de IA: uso o Claude Code como parte do fluxo de desenvolvimento e crio plugins para deixá-lo mais seguro e mais prático.
 
 <p align="center">
-  <img src="assets/agent.svg" alt="Mascote pixel art executando uma automação agêntica: lê o ERP, concilia, valida no SQL Server e abre PR" width="820">
+  <img src="assets/agent.svg" alt="Mascote que dorme, acorda com um comando, trabalha, se irrita com um erro, corrige e comemora" width="820">
+</p>
+
+## Como trabalho com IA
+
+Não uso IA só para conversar: monto agentes que fazem o trabalho de ponta a ponta, com revisão humana no fim.
+
+- **Orquestração de subagentes:** um modelo maior planeja e distribui as tarefas para modelos menores e mais baratos, que rodam em paralelo.
+- **Pipeline de segurança com três modelos:** um procura vulnerabilidades, outro aplica a correção e um terceiro valida.
+- **Servidores MCP:** conectam o Claude ao SQL Server e ao navegador, com trava de escrita (o [sql-guard](https://github.com/Breno-Sarcero/sql-guard)).
+- **Plugins e hooks para o Claude Code:** ajustam o comportamento do agente ao meu fluxo.
+
+<p align="center">
+  <img src="assets/flow.svg" alt="Fluxo agêntico: você, orquestrador, subagentes, ferramentas MCP e PR revisado" width="820">
 </p>
 
 ## Projetos em destaque
@@ -29,9 +42,18 @@ Plugin para o Claude Code que mostra uma barra de uso acima do prompt, com janel
 ### Outros
 
 - [IsyShell](https://github.com/Breno-Sarcero/isyshell): microsserviço para execução remota e segura de shell scripts via API REST. Hackathon FMU Tech 2026.
-- [UNO](https://github.com/Breno-Sarcero/UNO): assistente pessoal de voz no estilo Alexa, rodando 100% em hardware próprio (ESP32 + LLM local). Em fase de arquitetura.
+
+### Em construção
+
+- [UNO](https://github.com/Breno-Sarcero/UNO): assistente pessoal de voz no estilo Alexa, rodando 100% em hardware próprio (ESP32 + LLM local, com tool-calling). Em fase de arquitetura.
 
 ## Stack
+
+**IA e agentes**
+
+![Claude Code](https://img.shields.io/badge/Claude%20Code-1c1917?style=for-the-badge&logo=claude&logoColor=f59e0b)
+![MCP](https://img.shields.io/badge/MCP-1c1917?style=for-the-badge&logo=modelcontextprotocol&logoColor=f59e0b)
+![Playwright](https://img.shields.io/badge/Playwright-1c1917?style=for-the-badge)
 
 **Linguagens**
 
@@ -47,7 +69,6 @@ Plugin para o Claude Code que mostra uma barra de uso acima do prompt, com janel
 
 **Ferramentas**
 
-![Claude Code](https://img.shields.io/badge/Claude%20Code-1c1917?style=for-the-badge&logo=claude&logoColor=f59e0b)
 ![Questor ERP](https://img.shields.io/badge/Questor%20ERP-1c1917?style=for-the-badge)
 ![Git](https://img.shields.io/badge/Git-1c1917?style=for-the-badge&logo=git&logoColor=f59e0b)
 ![GitHub](https://img.shields.io/badge/GitHub-1c1917?style=for-the-badge&logo=github&logoColor=f59e0b)

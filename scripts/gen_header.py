@@ -14,7 +14,7 @@ PROMPT = "breno@sarcero:~$"
 SCRIPT = [
     ("whoami", ["Breno Sarcero · Auxiliar de TI na CLM Controller"]),
     ("cat stack.txt", ["Django · APIs · Questor ERP · SQL Server · Claude Code"]),
-    ("echo $INTERESSES", ["IA, automações com IA e plugins para o Claude Code"]),
+    ("echo $INTERESSES", ["agentes de IA, automações agênticas e integrações"]),
 ]
 
 parts, t, y = [], 0.6, Y0
