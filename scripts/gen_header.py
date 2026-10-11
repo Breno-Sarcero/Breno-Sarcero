@@ -12,11 +12,11 @@ PROMPT = "breno@sarcero:~$"
 
 # (comando, [(linha de saída, cor, segundos até o ✓ ou None)])
 SCRIPT = [
-    ('claude "Olá, sejam bem-vindos todos!"', [
+    ('"Olá, sejam bem-vindos todos!"', [
         ("● Lendo apresentacao.md…", DIM, 1.2),
         ("Breno Sarcero · Dev Júnior de IA · cursando ADS na FMU", GREEN, None)]),
     ("cat stack.txt", [("Django · APIs · Questor ERP · SQL Server · Claude Code", DIM, None)]),
-    ("echo $INTERESSES", [("automações com agentes de IA · análise de dados", DIM, None)]),
+    ("echo $INTERESSES", [("automações com agentes de IA · orquestração de IA · análise de dados", DIM, None)]),
 ]
 
 parts, t, y = [], 0.6, Y0

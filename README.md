@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/header-v2.svg" alt="Terminal: Olá, sejam bem-vindos todos! Breno Sarcero, Dev Júnior de IA, cursando ADS na FMU" width="820">
+  <img src="assets/header-v3.svg" alt="Terminal: Olá, sejam bem-vindos todos! Breno Sarcero, Dev Júnior de IA, cursando ADS na FMU" width="820">
 </p>
 
 ## Sobre mim
@@ -54,32 +54,26 @@ Plugin para o Claude Code que mostra uma barra de uso acima do prompt, com janel
 
 ## Stack
 
-**IA e agentes**
-
-![Claude Code](https://img.shields.io/badge/Claude%20Code-1c1917?style=for-the-badge&logo=claude&logoColor=f59e0b)
-![MCP](https://img.shields.io/badge/MCP-1c1917?style=for-the-badge&logo=modelcontextprotocol&logoColor=f59e0b)
-![Playwright](https://img.shields.io/badge/Playwright-1c1917?style=for-the-badge)
-
-**Linguagens**
-
-![Python](https://img.shields.io/badge/Python-1c1917?style=for-the-badge&logo=python&logoColor=f59e0b)
-![TypeScript](https://img.shields.io/badge/TypeScript-1c1917?style=for-the-badge&logo=typescript&logoColor=f59e0b)
-![SQL](https://img.shields.io/badge/SQL-1c1917?style=for-the-badge&logo=databricks&logoColor=f59e0b)
-
-**Frameworks e banco de dados**
-
-![Django](https://img.shields.io/badge/Django-1c1917?style=for-the-badge&logo=django&logoColor=f59e0b)
-![SQL Server](https://img.shields.io/badge/SQL%20Server-1c1917?style=for-the-badge&logo=microsoftsqlserver&logoColor=f59e0b)
-![REST APIs](https://img.shields.io/badge/REST%20APIs-1c1917?style=for-the-badge&logo=swagger&logoColor=f59e0b)
-
-**Ferramentas**
-
-![Power BI](https://img.shields.io/badge/Power%20BI-1c1917?style=for-the-badge)
-![Questor ERP](https://img.shields.io/badge/Questor%20ERP-1c1917?style=for-the-badge)
-![Git](https://img.shields.io/badge/Git-1c1917?style=for-the-badge&logo=git&logoColor=f59e0b)
-![GitHub](https://img.shields.io/badge/GitHub-1c1917?style=for-the-badge&logo=github&logoColor=f59e0b)
+<table>
+  <tr>
+    <td><b>IA e agentes</b></td>
+    <td><img src="assets/tiles-ia-v1.svg" alt="Claude Code, MCP, Playwright" height="48"></td>
+  </tr>
+  <tr>
+    <td><b>Back-end e web</b></td>
+    <td><img src="https://skillicons.dev/icons?theme=dark&i=python,django,ts,js,html,css" alt="Python, Django, TypeScript, JavaScript, HTML, CSS" height="48"></td>
+  </tr>
+  <tr>
+    <td><b>Dados</b></td>
+    <td><img src="assets/tiles-dados-v1.svg" alt="SQL Server, Power BI, Questor ERP" height="48"></td>
+  </tr>
+  <tr>
+    <td><b>Ferramentas</b></td>
+    <td><img src="https://skillicons.dev/icons?theme=dark&i=git,github,powershell" alt="Git, GitHub, PowerShell" height="48"></td>
+  </tr>
+</table>
 
 ## Contato
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-1c1917?style=for-the-badge&logo=linkedin&logoColor=f59e0b)](https://www.linkedin.com/in/breno-santiago-sarcero)
-[![E-mail](https://img.shields.io/badge/E--mail-1c1917?style=for-the-badge&logo=gmail&logoColor=f59e0b)](mailto:santiagobreno6@gmail.com)
+<a href="https://www.linkedin.com/in/breno-santiago-sarcero"><img src="https://skillicons.dev/icons?i=linkedin" alt="LinkedIn" height="40"></a>
+<a href="mailto:santiagobreno6@gmail.com"><img src="https://skillicons.dev/icons?i=gmail" alt="E-mail" height="40"></a>
